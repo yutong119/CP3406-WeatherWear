@@ -83,20 +83,46 @@ fun UtilityApp() {
 
 @Composable
 fun UtilityScreen() {
-    var counter by remember { mutableIntStateOf(0) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Utility Screen", style = MaterialTheme.typography.headlineMedium)
-        Text("Counter: $counter", style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = "WeatherWear",
+            style = MaterialTheme.typography.headlineMedium
+        )
 
-        Button(onClick = { counter++ }) {
-            Text("Increment")
-        }
+        Text(
+            text = "Singapore",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Text(
+            text = "31°C",
+            style = MaterialTheme.typography.displayMedium
+        )
+
+        Text(
+            text = "Sunny ☀️",
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Text(
+            text = "Recommended outfit:",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Text(
+            text = "👕 T-shirt and shorts",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Text(
+            text = "It is hot today. Wear light and breathable clothes.",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
