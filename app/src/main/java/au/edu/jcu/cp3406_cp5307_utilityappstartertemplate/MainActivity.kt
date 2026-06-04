@@ -42,7 +42,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-
+import androidx.compose.material3.RadioButton
 
 
 class MainActivity : ComponentActivity() {
@@ -293,38 +293,119 @@ fun WeatherInfoCard(
 fun SettingsScreen() {
     var city by remember { mutableStateOf("Singapore") }
     var showUmbrellaAdvice by remember { mutableStateOf(true) }
+    var temperatureUnit by remember { mutableStateOf("Celsius") }
+    var clothingSensitivity by remember { mutableStateOf("Normal") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             text = "Settings",
             style = MaterialTheme.typography.headlineMedium
         )
 
-        OutlinedTextField(
-            value = city,
-            onValueChange = { city = it },
-            label = { Text("City") },
+        Card(
             modifier = Modifier.fillMaxWidth()
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Show umbrella advice")
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = showUmbrellaAdvice,
-                onCheckedChange = { showUmbrellaAdvice = it }
-            )
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Location",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = { city = it },
+                    label = { Text("City") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
 
-        Text("Temperature unit: Celsius")
-        Text("Clothing sensitivity: Normal")
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Weather preferences",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Show umbrella advice")
+                    Spacer(modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = showUmbrellaAdvice,
+                        onCheckedChange = { showUmbrellaAdvice = it }
+                    )
+                }
+            }
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Temperature unit",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = temperatureUnit == "Celsius",
+                        onClick = { temperatureUnit = "Celsius" }
+                    )
+                    Text("Celsius")
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = temperatureUnit == "Fahrenheit",
+                        onClick = { temperatureUnit = "Fahrenheit" }
+                    )
+                    Text("Fahrenheit")
+                }
+            }
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Clothing sensitivity",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                listOf("Cold easily", "Normal", "Hot easily").forEach { option ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = clothingSensitivity == option,
+                            onClick = { clothingSensitivity = option }
+                        )
+                        Text(option)
+                    }
+                }
+            }
+        }
     }
 }
