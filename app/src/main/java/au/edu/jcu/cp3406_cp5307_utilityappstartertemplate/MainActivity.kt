@@ -35,6 +35,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,28 +113,27 @@ fun UtilityScreen() {
             style = MaterialTheme.typography.bodyMedium
         )
 
-        Card(
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = "Singapore",
-                    style = MaterialTheme.typography.titleLarge
-                )
+            WeatherInfoCard(
+                title = "Location",
+                value = "Singapore",
+                modifier = Modifier.weight(1f)
+            )
 
-                Text(
-                    text = "31°C",
-                    style = MaterialTheme.typography.displayMedium
-                )
+            WeatherInfoCard(
+                title = "Temp",
+                value = "31°C",
+                modifier = Modifier.weight(1f)
+            )
 
-                Text(
-                    text = "Sunny ☀️",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
+            WeatherInfoCard(
+                title = "Weather",
+                value = "Sunny ☀️",
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Card(
@@ -135,17 +141,24 @@ fun UtilityScreen() {
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
                     text = "Recommended outfit",
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                Text(
-                    text = "👕🩳",
-                    style = MaterialTheme.typography.displaySmall
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "🧍‍♀️\n👕🩳",
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                }
 
                 Text(
                     text = "T-shirt and shorts",
@@ -161,6 +174,34 @@ fun UtilityScreen() {
     }
 }
 
+@Composable
+fun WeatherInfoCard(
+    title: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelMedium
+            )
+
+            Text(
+                text = value,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
+}
 @Composable
 fun SettingsScreen() {
     var city by remember { mutableStateOf("Singapore") }
