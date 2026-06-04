@@ -35,6 +35,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Card
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +64,7 @@ fun UtilityApp() {
     var selectedTab by remember { mutableStateOf("Utility") }
 
     Scaffold(
+        containerColor = Color(0xFFE3F2FD),
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
@@ -93,7 +97,7 @@ fun UtilityScreen() {
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             text = "WeatherWear",
@@ -101,34 +105,62 @@ fun UtilityScreen() {
         )
 
         Text(
-            text = "Singapore",
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Text(
-            text = "31°C",
-            style = MaterialTheme.typography.displayMedium
-        )
-
-        Text(
-            text = "Sunny ☀️",
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Text(
-            text = "Recommended outfit:",
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        Text(
-            text = "👕 T-shirt and shorts",
-            style = MaterialTheme.typography.headlineSmall
-        )
-
-        Text(
-            text = "It is hot today. Wear light and breathable clothes.",
+            text = "Simple clothing advice based on today's weather.",
             style = MaterialTheme.typography.bodyMedium
         )
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Singapore",
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                Text(
+                    text = "31°C",
+                    style = MaterialTheme.typography.displayMedium
+                )
+
+                Text(
+                    text = "Sunny ☀️",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Recommended outfit",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "👕🩳",
+                    style = MaterialTheme.typography.displaySmall
+                )
+
+                Text(
+                    text = "T-shirt and shorts",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                Text(
+                    text = "It is hot today. Wear light and breathable clothes.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
     }
 }
 
