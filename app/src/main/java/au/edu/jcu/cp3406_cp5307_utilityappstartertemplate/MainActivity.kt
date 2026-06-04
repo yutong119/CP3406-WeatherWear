@@ -109,12 +109,10 @@ fun UtilityScreen() {
             text = "WeatherWear",
             style = MaterialTheme.typography.headlineMedium
         )
-
         Text(
             text = "Simple clothing advice based on today's weather.",
             style = MaterialTheme.typography.bodyMedium
         )
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -124,13 +122,11 @@ fun UtilityScreen() {
                 value = "Singapore",
                 modifier = Modifier.weight(1f)
             )
-
             WeatherInfoCard(
                 title = "Temp",
                 value = "31°C",
                 modifier = Modifier.weight(1f)
             )
-
             WeatherInfoCard(
                 title = "Weather",
                 value = "Sunny ☀️",
@@ -161,15 +157,37 @@ fun UtilityScreen() {
                         style = MaterialTheme.typography.displayMedium
                     )
                 }
-
                 Text(
                     text = "T-shirt and shorts",
                     style = MaterialTheme.typography.headlineSmall
                 )
-
                 Text(
                     text = "It is hot today. Wear light and breathable clothes.",
                     style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Temperature comfort",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "31°C feels hot today",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                ComfortTemperatureBar(
+                    temperature = 31,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
