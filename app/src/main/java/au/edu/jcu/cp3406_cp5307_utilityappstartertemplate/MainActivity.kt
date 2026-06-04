@@ -35,12 +35,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Card
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+
 
 
 class MainActivity : ComponentActivity() {
@@ -170,6 +172,73 @@ fun UtilityScreen() {
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun ComfortTemperatureBar(
+    temperature: Int,
+    modifier: Modifier = Modifier
+) {
+    val minTemp = -10
+    val maxTemp = 40
+
+    val progress = ((temperature - minTemp).toFloat() / (maxTemp - minTemp))
+        .coerceIn(0f, 1f)
+
+    val comfortLabel = when {
+        temperature <= 5 -> "Very cold"
+        temperature <= 17 -> "Cold"
+        temperature <= 25 -> "Comfortable"
+        temperature <= 31 -> "Warm"
+        else -> "Very hot"
+    }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Comfort level", style = MaterialTheme.typography.titleSmall)
+            Text(comfortLabel, style = MaterialTheme.typography.labelLarge)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(18.dp)
+                .clip(RoundedCornerShape(50))
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Color(0xFF4A90E2), // cold blue
+                            Color(0xFF66BB6A), // comfortable green
+                            Color(0xFFFF7043)  // hot red
+                        )
+                    )
+                )
+        ) {
+            Box(
+                modifier = Modifier
+                    .offset(x = (progress * 250).dp)
+                    .width(6.dp)
+                    .height(18.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White.copy(alpha = 0.9f))
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Cold", style = MaterialTheme.typography.labelSmall)
+            Text("Comfort", style = MaterialTheme.typography.labelSmall)
+            Text("Hot", style = MaterialTheme.typography.labelSmall)
         }
     }
 }
