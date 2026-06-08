@@ -66,11 +66,9 @@ fun UtilityAppPreview() {
         UtilityApp()
     }
 }
-
 @Composable
 fun UtilityApp() {
     var selectedTab by remember { mutableStateOf("Utility") }
-
     var city by remember { mutableStateOf("Singapore") }
     var showUmbrellaAdvice by remember { mutableStateOf(true) }
     var temperatureUnit by remember { mutableStateOf("Celsius") }
@@ -126,17 +124,22 @@ fun UtilityScreen(
     clothingSensitivity: String,
     showUmbrellaAdvice: Boolean
 ) {
-    val displayedTemperature = if (temperatureUnit == "Fahrenheit") {
-        "87°F"
-    } else {
-        "31°C"
-    }
+    val temperatureCelsius = 31
+    val weatherCondition = "Sunny ☀️"
 
-    val umbrellaStatus = if (showUmbrellaAdvice) {
-        "Umbrella advice is on"
-    } else {
-        "Umbrella advice is off"
-    }
+    val displayedTemperature = formatTemperature(
+        temperatureCelsius = temperatureCelsius,
+        temperatureUnit = temperatureUnit
+    )
+
+    val outfitRecommendation = getOutfitRecommendation(
+        temperatureCelsius = temperatureCelsius,
+        clothingSensitivity = clothingSensitivity,
+        showUmbrellaAdvice = showUmbrellaAdvice,
+        weatherCondition = weatherCondition
+    )
+
+    val comfortLabel = getComfortLabel(temperatureCelsius)
 
     Column(
         modifier = Modifier
@@ -149,10 +152,12 @@ fun UtilityScreen(
             text = "WeatherWear",
             style = MaterialTheme.typography.headlineMedium
         )
+
         Text(
             text = "Simple clothing advice based on today's weather.",
             style = MaterialTheme.typography.bodyMedium
         )
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -162,14 +167,16 @@ fun UtilityScreen(
                 value = city.ifBlank { "Unknown" },
                 modifier = Modifier.weight(1f)
             )
+
             WeatherInfoCard(
                 title = "Temp",
                 value = displayedTemperature,
                 modifier = Modifier.weight(1f)
             )
+
             WeatherInfoCard(
                 title = "Weather",
-                value = "Sunny ☀️",
+                value = weatherCondition,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -193,26 +200,23 @@ fun UtilityScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "🧍‍♀️\n👕🩳",
+                        text = outfitRecommendation.characterPreview,
                         style = MaterialTheme.typography.displayMedium
                     )
                 }
+
                 Text(
-                    text = "T-shirt and shorts",
+                    text = outfitRecommendation.outfitName,
                     style = MaterialTheme.typography.headlineSmall
                 )
+
                 Text(
-                    text = "It is hot today. Wear light and breathable clothes.",
+                    text = outfitRecommendation.description,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
                     text = "Sensitivity: $clothingSensitivity",
-                    style = MaterialTheme.typography.bodySmall
-                )
-
-                Text(
-                    text = umbrellaStatus,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -231,12 +235,12 @@ fun UtilityScreen(
                 )
 
                 Text(
-                    text = "$displayedTemperature feels hot today",
+                    text = "$displayedTemperature feels ${comfortLabel.lowercase()} today",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 ComfortTemperatureBar(
-                    temperature = 31,
+                    temperature = temperatureCelsius,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -255,13 +259,7 @@ fun ComfortTemperatureBar(
     val progress = ((temperature - minTemp).toFloat() / (maxTemp - minTemp))
         .coerceIn(0f, 1f)
 
-    val comfortLabel = when {
-        temperature <= 5 -> "Very cold"
-        temperature <= 17 -> "Cold"
-        temperature <= 25 -> "Comfortable"
-        temperature <= 31 -> "Warm"
-        else -> "Very hot"
-    }
+    val comfortLabel = getComfortLabel(temperature)
 
     Column(
         modifier = modifier,
@@ -463,5 +461,96 @@ fun SettingsScreen(
                 }
             }
         }
+    }
+}
+
+data class OutfitRecommendation(
+    val outfitName: String,
+    val description: String,
+    val characterPreview: String
+)
+
+fun formatTemperature(
+    temperatureCelsius: Int,
+    temperatureUnit: String
+): String {
+    return if (temperatureUnit == "Fahrenheit") {
+        val fahrenheit = temperatureCelsius * 9 / 5 + 32
+        "$fahrenheit°F"
+    } else {
+        "$temperatureCelsius°C"
+    }
+}
+
+fun getComfortLabel(temperatureCelsius: Int): String {
+    return when {
+        temperatureCelsius <= 5 -> "Very cold"
+        temperatureCelsius <= 17 -> "Cold"
+        temperatureCelsius <= 25 -> "Comfortable"
+        temperatureCelsius <= 31 -> "Warm"
+        else -> "Very hot"
+    }
+}
+
+fun getOutfitRecommendation(
+    temperatureCelsius: Int,
+    clothingSensitivity: String,
+    showUmbrellaAdvice: Boolean,
+    weatherCondition: String
+): OutfitRecommendation {
+    val adjustedTemperature = when (clothingSensitivity) {
+        "Cold easily" -> temperatureCelsius - 3
+        "Hot easily" -> temperatureCelsius + 3
+        else -> temperatureCelsius
+    }
+
+    val baseRecommendation = when {
+        adjustedTemperature >= 32 -> OutfitRecommendation(
+            outfitName = "T-shirt and shorts",
+            description = "It is very hot today. Wear light and breathable clothes.",
+            characterPreview = "🧍‍♀️\n👕🩳"
+        )
+
+        adjustedTemperature >= 25 -> OutfitRecommendation(
+            outfitName = "Light clothes",
+            description = "It is warm today. A T-shirt or thin shirt should be comfortable.",
+            characterPreview = "🧍‍♀️\n👕"
+        )
+
+        adjustedTemperature >= 18 -> OutfitRecommendation(
+            outfitName = "Light jacket",
+            description = "The weather is mild. A light jacket or cardigan is a safe choice.",
+            characterPreview = "🧍‍♀️\n🧥"
+        )
+
+        adjustedTemperature >= 10 -> OutfitRecommendation(
+            outfitName = "Sweater and jacket",
+            description = "It is a little cold. Wear a sweater with a jacket.",
+            characterPreview = "🧍‍♀️\n🧶🧥"
+        )
+
+        adjustedTemperature >= 0 -> OutfitRecommendation(
+            outfitName = "Thick coat and scarf",
+            description = "It is cold today. A thick coat and scarf will help you stay warm.",
+            characterPreview = "🧍‍♀️\n🧥🧣"
+        )
+
+        else -> OutfitRecommendation(
+            outfitName = "Down jacket and gloves",
+            description = "It is freezing. Wear a down jacket, gloves, and a warm hat.",
+            characterPreview = "🧍‍♀️\n🧥🧤"
+        )
+    }
+
+    val needsUmbrella = weatherCondition.contains("Rain", ignoreCase = true)
+
+    return if (showUmbrellaAdvice && needsUmbrella) {
+        baseRecommendation.copy(
+            outfitName = "${baseRecommendation.outfitName} + umbrella",
+            description = "${baseRecommendation.description} Bring an umbrella because rain is expected.",
+            characterPreview = "${baseRecommendation.characterPreview}\n☂️"
+        )
+    } else {
+        baseRecommendation
     }
 }
