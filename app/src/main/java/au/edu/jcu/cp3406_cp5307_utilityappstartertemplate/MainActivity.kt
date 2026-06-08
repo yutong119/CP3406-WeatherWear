@@ -69,6 +69,11 @@ fun UtilityAppPreview() {
 fun UtilityApp() {
     var selectedTab by remember { mutableStateOf("Utility") }
 
+    var city by remember { mutableStateOf("Singapore") }
+    var showUmbrellaAdvice by remember { mutableStateOf(true) }
+    var temperatureUnit by remember { mutableStateOf("Celsius") }
+    var clothingSensitivity by remember { mutableStateOf("Normal") }
+
     Scaffold(
         containerColor = Color(0xFFE3F2FD),
         bottomBar = {
@@ -90,15 +95,47 @@ fun UtilityApp() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedTab) {
-                "Utility" -> UtilityScreen()
-                "Settings" -> SettingsScreen()
+                "Utility" -> UtilityScreen(
+                    city = city,
+                    temperatureUnit = temperatureUnit,
+                    clothingSensitivity = clothingSensitivity,
+                    showUmbrellaAdvice = showUmbrellaAdvice
+                )
+
+                "Settings" -> SettingsScreen(
+                    city = city,
+                    onCityChange = { city = it },
+                    showUmbrellaAdvice = showUmbrellaAdvice,
+                    onShowUmbrellaAdviceChange = { showUmbrellaAdvice = it },
+                    temperatureUnit = temperatureUnit,
+                    onTemperatureUnitChange = { temperatureUnit = it },
+                    clothingSensitivity = clothingSensitivity,
+                    onClothingSensitivityChange = { clothingSensitivity = it }
+                )
             }
         }
     }
 }
 
 @Composable
-fun UtilityScreen() {
+fun UtilityScreen(
+    city: String,
+    temperatureUnit: String,
+    clothingSensitivity: String,
+    showUmbrellaAdvice: Boolean
+) {
+    val displayedTemperature = if (temperatureUnit == "Fahrenheit") {
+        "87°F"
+    } else {
+        "31°C"
+    }
+
+    val umbrellaStatus = if (showUmbrellaAdvice) {
+        "Umbrella advice is on"
+    } else {
+        "Umbrella advice is off"
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,12 +156,12 @@ fun UtilityScreen() {
         ) {
             WeatherInfoCard(
                 title = "Location",
-                value = "Singapore",
+                value = city.ifBlank { "Unknown" },
                 modifier = Modifier.weight(1f)
             )
             WeatherInfoCard(
                 title = "Temp",
-                value = "31°C",
+                value = displayedTemperature,
                 modifier = Modifier.weight(1f)
             )
             WeatherInfoCard(
@@ -165,6 +202,16 @@ fun UtilityScreen() {
                     text = "It is hot today. Wear light and breathable clothes.",
                     style = MaterialTheme.typography.bodyMedium
                 )
+
+                Text(
+                    text = "Sensitivity: $clothingSensitivity",
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+                Text(
+                    text = umbrellaStatus,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
 
@@ -181,7 +228,7 @@ fun UtilityScreen() {
                 )
 
                 Text(
-                    text = "31°C feels hot today",
+                    text = "$displayedTemperature feels hot today",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -289,13 +336,18 @@ fun WeatherInfoCard(
         }
     }
 }
-@Composable
-fun SettingsScreen() {
-    var city by remember { mutableStateOf("Singapore") }
-    var showUmbrellaAdvice by remember { mutableStateOf(true) }
-    var temperatureUnit by remember { mutableStateOf("Celsius") }
-    var clothingSensitivity by remember { mutableStateOf("Normal") }
 
+@Composable
+fun SettingsScreen(
+    city: String,
+    onCityChange: (String) -> Unit,
+    showUmbrellaAdvice: Boolean,
+    onShowUmbrellaAdviceChange: (Boolean) -> Unit,
+    temperatureUnit: String,
+    onTemperatureUnitChange: (String) -> Unit,
+    clothingSensitivity: String,
+    onClothingSensitivityChange: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -321,7 +373,7 @@ fun SettingsScreen() {
 
                 OutlinedTextField(
                     value = city,
-                    onValueChange = { city = it },
+                    onValueChange = onCityChange,
                     label = { Text("City") },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -348,7 +400,7 @@ fun SettingsScreen() {
                     Spacer(modifier = Modifier.weight(1f))
                     Switch(
                         checked = showUmbrellaAdvice,
-                        onCheckedChange = { showUmbrellaAdvice = it }
+                        onCheckedChange = onShowUmbrellaAdviceChange
                     )
                 }
             }
@@ -369,7 +421,7 @@ fun SettingsScreen() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
                         selected = temperatureUnit == "Celsius",
-                        onClick = { temperatureUnit = "Celsius" }
+                        onClick = { onTemperatureUnitChange("Celsius") }
                     )
                     Text("Celsius")
                 }
@@ -377,7 +429,7 @@ fun SettingsScreen() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
                         selected = temperatureUnit == "Fahrenheit",
-                        onClick = { temperatureUnit = "Fahrenheit" }
+                        onClick = { onTemperatureUnitChange("Fahrenheit") }
                     )
                     Text("Fahrenheit")
                 }
@@ -400,7 +452,7 @@ fun SettingsScreen() {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
                             selected = clothingSensitivity == option,
-                            onClick = { clothingSensitivity = option }
+                            onClick = { onClothingSensitivityChange(option) }
                         )
                         Text(option)
                     }
