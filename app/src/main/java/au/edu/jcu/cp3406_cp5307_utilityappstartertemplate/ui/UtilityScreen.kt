@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.model.OutfitRecommendation
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.width
 
 @Composable
 fun UtilityScreen(
@@ -50,19 +52,38 @@ fun UtilityScreen(
             style = MaterialTheme.typography.bodyMedium
         )
 
-        if (isLoading) {
-            Text(
-                text = "Loading weather data...",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+        when {
+            isLoading -> {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(24.dp)
+                    )
 
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Red
-            )
+                    Text(
+                        text = "Loading weather data...",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            errorMessage != null -> {
+                Text(
+                    text = errorMessage,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Red
+                )
+            }
+
+            else -> {
+                Text(
+                    text = "Updated from live weather API",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF2E7D32)
+                )
+            }
         }
 
         Row(

@@ -25,7 +25,8 @@ class WeatherViewModel : ViewModel() {
             )
 
             try {
-                val result = repository.fetchWeatherForCity(uiState.city)
+                val requestedCity = uiState.city
+                val result = repository.fetchWeatherForCity(requestedCity)
 
                 uiState = uiState.copy(
                     temperatureCelsius = result.first,
