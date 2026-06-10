@@ -6,5 +6,7 @@ data class WeatherUiState(
     val weatherCondition: String = "Sunny ☀️",
     val temperatureUnit: String = "Celsius",
     val clothingSensitivity: String = "Normal",
-    val showUmbrellaAdvice: Boolean = true
+    val showUmbrellaAdvice: Boolean = true,
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 )

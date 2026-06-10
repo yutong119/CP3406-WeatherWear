@@ -4,16 +4,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.data.WeatherRepository
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.model.WeatherUiState
+import kotlinx.coroutines.launch
 
 class WeatherViewModel : ViewModel() {
-
     private val repository = WeatherRepository()
-
     var uiState by mutableStateOf(WeatherUiState())
         private set
+    init {
+        fetchWeather()
+    }
 
+    fun fetchWeather() {
+        viewModelScope.launch {
+            uiState = uiState.copy(
+                isLoading = true,
+                errorMessage = null
+            )
+
+            try {
+                val result = repository.fetchWeatherForCity(uiState.city)
+
+                uiState = uiState.copy(
+                    temperatureCelsius = result.first,
+                    weatherCondition = result.second,
+                    isLoading = false,
+                    errorMessage = null
+                )
+            } catch (e: Exception) {
+                uiState = uiState.copy(
+                    isLoading = false,
+                    errorMessage = "Unable to fetch weather data."
+                )
+            }
+        }
+    }
     fun updateCity(newCity: String) {
         uiState = uiState.copy(city = newCity)
     }

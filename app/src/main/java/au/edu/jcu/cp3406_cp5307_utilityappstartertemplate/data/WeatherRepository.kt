@@ -1,8 +1,49 @@
 package au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.data
 
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.model.OutfitRecommendation
+import kotlin.math.roundToInt
 
 class WeatherRepository {
+
+    suspend fun fetchWeatherForCity(city: String): Pair<Int, String> {
+        val coordinates = getCoordinatesForCity(city)
+        val response = RetrofitInstance.weatherApi.getCurrentWeather(
+            latitude = coordinates.first,
+            longitude = coordinates.second
+        )
+
+        val temperature = response.current.temperature_2m.roundToInt()
+        val weatherCondition = mapWeatherCodeToCondition(response.current.weather_code)
+        return Pair(temperature, weatherCondition)
+    }
+
+    private fun getCoordinatesForCity(city: String): Pair<Double, Double> {
+        return when (city.trim().lowercase()) {
+            "singapore" -> Pair(1.3521, 103.8198)
+            "tokyo" -> Pair(35.6762, 139.6503)
+            "london" -> Pair(51.5072, -0.1276)
+            "new york" -> Pair(40.7128, -74.0060)
+            "sydney" -> Pair(-33.8688, 151.2093)
+            "beijing" -> Pair(39.9042, 116.4074)
+            "taipei" -> Pair(25.0330, 121.5654)
+            else -> Pair(1.3521, 103.8198)
+        }
+    }
+
+    private fun mapWeatherCodeToCondition(code: Int): String {
+        return when (code) {
+            0 -> "Sunny ☀️"
+            1, 2 -> "Partly cloudy ⛅"
+            3 -> "Cloudy ☁️"
+            45, 48 -> "Foggy 🌫️"
+            51, 53, 55, 56, 57 -> "Drizzle 🌦️"
+            61, 63, 65, 66, 67 -> "Rainy 🌧️"
+            71, 73, 75, 77 -> "Snowy ❄️"
+            80, 81, 82 -> "Rain showers 🌧️"
+            95, 96, 99 -> "Thunderstorm ⛈️"
+            else -> "Unknown"
+        }
+    }
 
     fun formatTemperature(
         temperatureCelsius: Int,
@@ -76,7 +117,9 @@ class WeatherRepository {
             )
         }
 
-        val needsUmbrella = weatherCondition.contains("Rain", ignoreCase = true)
+        val needsUmbrella = weatherCondition.contains("Rain", ignoreCase = true) ||
+                weatherCondition.contains("Drizzle", ignoreCase = true) ||
+                weatherCondition.contains("Thunderstorm", ignoreCase = true)
 
         return if (showUmbrellaAdvice && needsUmbrella) {
             baseRecommendation.copy(
