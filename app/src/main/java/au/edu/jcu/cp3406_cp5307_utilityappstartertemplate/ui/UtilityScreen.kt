@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.model.OutfitRecommendation
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun UtilityScreen(
@@ -27,8 +28,11 @@ fun UtilityScreen(
     displayedTemperature: String,
     comfortLabel: String,
     clothingSensitivity: String,
-    outfitRecommendation: OutfitRecommendation
-) {
+    outfitRecommendation: OutfitRecommendation,
+    isLoading: Boolean,
+    errorMessage: String?
+)
+{
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,6 +49,21 @@ fun UtilityScreen(
             text = "Simple clothing advice based on today's weather.",
             style = MaterialTheme.typography.bodyMedium
         )
+
+        if (isLoading) {
+            Text(
+                text = "Loading weather data...",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Red
+            )
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),

@@ -36,7 +36,7 @@ class WeatherViewModel : ViewModel() {
             } catch (e: Exception) {
                 uiState = uiState.copy(
                     isLoading = false,
-                    errorMessage = "Unable to fetch weather data."
+                    errorMessage = "Unable to fetch weather data: ${e::class.simpleName} - ${e.message}"
                 )
             }
         }

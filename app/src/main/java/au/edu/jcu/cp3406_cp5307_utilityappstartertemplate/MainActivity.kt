@@ -84,7 +84,9 @@ fun UtilityApp(
                     displayedTemperature = weatherViewModel.getDisplayedTemperature(),
                     comfortLabel = weatherViewModel.getComfortLabel(),
                     clothingSensitivity = uiState.clothingSensitivity,
-                    outfitRecommendation = weatherViewModel.getOutfitRecommendation()
+                    outfitRecommendation = weatherViewModel.getOutfitRecommendation(),
+                    isLoading = uiState.isLoading,
+                    errorMessage = uiState.errorMessage
                 )
 
                 "Settings" -> SettingsScreen(
