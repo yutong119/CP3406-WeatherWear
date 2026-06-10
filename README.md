@@ -1,55 +1,72 @@
-# Utility App Starter – CP3406 / CP5307
+# WeatherWear
 
-This is a basic Android app template for **Assessment 1: Utility App** in CP3406/CP5603..  
-It provides the structure for a simple tabular UI using **Jetpack Compose** and **Material Design 3**.
+WeatherWear is a utility-style Android app that provides simple clothing advice based on live weather data.
 
----
+## Purpose
 
-## Getting Started
+The app helps users quickly understand what to wear for the day by converting weather information into clear outfit recommendations.
 
-### How to Run
-1. Clone or download this repo  
-2. Open in Android Studio  
-3. Run on an emulator or physical device (API 26+ recommended)  
+## Features
 
----
+- Live weather data using Open-Meteo API
+- Location, temperature, and weather condition cards
+- Outfit recommendation based on temperature and weather
+- Temperature comfort indicator
+- Settings screen for city, temperature unit, clothing sensitivity, and umbrella advice
+- Loading, error, and success states for API requests
 
-## Composables
+## Technologies Used
 
-### UtilityApp()
-- Contains the screen layout using a Scaffold
-- Toggles content between Utility and Settings
+- Kotlin
+- Jetpack Compose
+- Material Design 3
+- ViewModel
+- Repository pattern
+- Retrofit
+- Open-Meteo API（WeatherWear uses the Open-Meteo API because it provides free live weather data without requiring an API key. This makes the project easier to run and avoids exposing sensitive API credentials in the GitHub repository.）
 
-### UtilityScreen()
-- Displays a simple counter (replace with your utility logic)  
-- Includes a button to increment the counter
+## Architecture
 
-### SettingsScreen()
-- Placeholder for user preferences or configuration  
-- Can be extended to modify main screen behavior (e.g., theme, units, limits)  
+The app is organised into separate layers:
 
----
+- `ui`: Compose screens and reusable UI components
+- `viewmodel`: UI state and app logic
+- `data`: Repository and API service
+- `model`: Data classes for UI state, outfit recommendation, and API response
 
-## Key Concepts Covered
+## How to Run
 
-| Week | Concept                        | Used In                          |
-|------|--------------------------------|----------------------------------|
-| 1    | Kotlin + Android Studio         | MainActivity.kt |
-| 2    | Jetpack Compose Layouts         | UtilityApp(), UtilityScreen(), SettingsScreen()   |
-| 3    | Material Design 3               | CP3406_CP5603UtilityAppStarterTemplateTheme, MaterialTheme.typography |
-| 4    | ViewModel | Not included in starter          |
-| 5    | Retrofit  | Not included in starter          |
+1. Clone or download this repository.
+2. Open the project in Android Studio.
+3. Sync Gradle.
+4. Run the app on an Android emulator or physical device.
+5. Use the Settings screen to enter a supported city and refresh the weather.
 
----
+## Supported Cities
 
-## Suggested Extensions
-- Replace counter with a real utility (e.g., hydration tracker, timer)  
-- Add a ViewModel for state management  
-- Use SharedPreferences or DataStore to persist settings  
-- Add a simple API call using Retrofit (e.g., fetch weather or quotes)  
+The current version supports selected cities through predefined coordinates, such as:
 
----
+- Singapore
+- London
+- Tokyo
+- Sydney
+- Beijing
+- Taipei
+- New York
 
-## 📚 License
-This template is provided for educational use in CP3406.  
-Feel free to modify and extend it for your assessment.
+## API
+
+WeatherWear uses the Open-Meteo API to retrieve current temperature and weather code data. The API does not require an API key.
+
+## Known Limitations
+
+- Only selected cities are currently supported.
+- Weather data depends on internet connection.
+- Outfit recommendations are rule-based rather than personalised by user profile.
+
+## Future Improvements
+
+- Add search support for more cities.
+- Improve visual outfit illustrations.
+- Add more detailed weather information, such as wind and rain probability.
+- Save user settings locally.
