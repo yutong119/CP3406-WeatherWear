@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Button
 
 @Composable
 fun SettingsScreen(
@@ -29,7 +30,8 @@ fun SettingsScreen(
     temperatureUnit: String,
     onTemperatureUnitChange: (String) -> Unit,
     clothingSensitivity: String,
-    onClothingSensitivityChange: (String) -> Unit
+    onClothingSensitivityChange: (String) -> Unit,
+    onRefreshWeather: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +63,13 @@ fun SettingsScreen(
                     label = { Text("City") },
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                Button(
+                    onClick = onRefreshWeather,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Refresh weather")
+                }
             }
         }
 

@@ -95,7 +95,8 @@ fun UtilityApp(
                     temperatureUnit = uiState.temperatureUnit,
                     onTemperatureUnitChange = weatherViewModel::updateTemperatureUnit,
                     clothingSensitivity = uiState.clothingSensitivity,
-                    onClothingSensitivityChange = weatherViewModel::updateClothingSensitivity
+                    onClothingSensitivityChange = weatherViewModel::updateClothingSensitivity,
+                    onRefreshWeather = weatherViewModel::fetchWeather
                 )
             }
         }
