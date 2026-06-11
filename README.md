@@ -44,7 +44,7 @@ The app is organised into separate layers:
 
 ## Supported Cities
 
-The current version supports selected cities through predefined coordinates, such as:
+The app uses the Open-Meteo Geocoding API to convert city names into coordinates, so users can search for many cities instead of only predefined locations.
 
 - Singapore
 - London
@@ -63,6 +63,8 @@ WeatherWear uses the Open-Meteo API to retrieve current temperature and weather 
 - Only selected cities are currently supported.
 - Weather data depends on internet connection.
 - Outfit recommendations are rule-based rather than personalised by user profile.
+- - If multiple cities share the same name, the app uses the first result returned by the geocoding API.
+- Weather data depends on internet connection.
 
 ## Future Improvements
 

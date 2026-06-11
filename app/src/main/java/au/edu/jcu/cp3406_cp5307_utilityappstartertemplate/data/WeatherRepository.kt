@@ -6,14 +6,22 @@ import kotlin.math.roundToInt
 class WeatherRepository {
 
     suspend fun fetchWeatherForCity(city: String): Pair<Int, String> {
-        val coordinates = getCoordinatesForCity(city)
-        val response = RetrofitInstance.weatherApi.getCurrentWeather(
-            latitude = coordinates.first,
-            longitude = coordinates.second
+        val cityName = city.trim()
+        if (cityName.isBlank()) {
+            throw IllegalArgumentException("City name cannot be empty")
+        }
+        val geocodingResponse = RetrofitInstance.geocodingApi.searchCity(cityName)
+        val location = geocodingResponse.results?.firstOrNull()
+            ?: throw IllegalArgumentException("City not found")
+        val weatherResponse = RetrofitInstance.weatherApi.getCurrentWeather(
+            latitude = location.latitude,
+            longitude = location.longitude
+        )
+        val temperature = weatherResponse.current.temperature_2m.toInt()
+        val weatherCondition = mapWeatherCodeToCondition(
+            weatherResponse.current.weather_code
         )
 
-        val temperature = response.current.temperature_2m.roundToInt()
-        val weatherCondition = mapWeatherCodeToCondition(response.current.weather_code)
         return Pair(temperature, weatherCondition)
     }
 
