@@ -34,6 +34,8 @@ The app is organised into separate layers:
 - `data`: Repository and API service
 - `model`: Data classes for UI state, outfit recommendation, and API response
 
+The app uses a ViewModel and Repository pattern to separate UI state, business logic, and data fetching. For this assignment, the repository is created directly inside the ViewModel rather than using a full dependency injection framework such as Hilt, because the app scope is small.
+
 ## How to Run
 
 1. Clone or download this repository.
@@ -45,14 +47,6 @@ The app is organised into separate layers:
 ## Supported Cities
 
 The app uses the Open-Meteo Geocoding API to convert city names into coordinates, so users can search for many cities instead of only predefined locations.
-
-- Singapore
-- London
-- Tokyo
-- Sydney
-- Beijing
-- Taipei
-- New York
 
 ## API
 
